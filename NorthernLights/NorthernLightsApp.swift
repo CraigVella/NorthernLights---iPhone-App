@@ -11,8 +11,12 @@ import SwiftUI
 struct NorthernLightsApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
-    var btc = BTConnection()
     var zones = Zones()
+    var btc : BTConnection!
+    
+    init() {
+        btc = BTConnection(ZoneObject: zones)
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -21,8 +25,11 @@ struct NorthernLightsApp: App {
                 .environmentObject(zones)
         }.onChange(of: scenePhase) { phase in
             if phase == .active {
+                btc.setAutoReconnect(shouldReconnect: true)
                 btc.resestablishConnection()
             } else if phase == .background {
+                btc.BTSendSaveRequest()
+                btc.setAutoReconnect(shouldReconnect: false)
                 btc.disconnect()
             }
         }

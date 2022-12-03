@@ -22,6 +22,15 @@ final class BTManager : NSObject {
         }
     }
     
+    func disconnect() {
+        guard connectedDevice != nil else {
+            print ("BTManager :: Cannot disconnect if already disconnected")
+            return
+        }
+        print("BTManager :: Disconnect Request")
+        centralManager.cancelPeripheralConnection(connectedDevice)
+    }
+    
     func startScanning() {
         if canScanForConnection {
             _canScanForConnection = false
@@ -30,6 +39,22 @@ final class BTManager : NSObject {
         }  else {
             print("BTManager :: Scan Requested but hardware not in correct state")
         }
+    }
+    
+    func sendDataUpdate(data : Data) {
+        guard allZoneCharacteristic != nil else {
+            print ("BTManager :: Cant send data if we're not connected!!");
+            return
+        }
+        connectedDevice.writeValue(data, for: allZoneCharacteristic, type: CBCharacteristicWriteType.withResponse)
+    }
+    
+    func sendSaveRequest() {
+        guard requestSaveZoneDataCharacteristic != nil else {
+            print ("BTManager :: Cant send save request if were not connected");
+            return
+        }
+        connectedDevice.writeValue(Data([UInt8(0)]), for: requestSaveZoneDataCharacteristic, type: CBCharacteristicWriteType.withResponse)
     }
     
     override private init() {
@@ -68,7 +93,7 @@ extension BTManager : CBPeripheralDelegate {
             if characteristic.uuid.uuidString.uppercased().isEqual(BTUUIDDefs.kBLECharacteristic_WRData_UUID.uppercased()) {
                 print ("BTManager :: Found Characteristic <" + BTUUIDDefs.kBLECharacteristic_WRData_UUID + "> :: DATA :: Registering For Changes")
                 self.allZoneCharacteristic = characteristic
-                peripheral.setNotifyValue(true, for: characteristic)
+                //peripheral.setNotifyValue(true, for: characteristic)
                 peripheral.readValue(for: characteristic)
             } else if characteristic.uuid.uuidString.uppercased().isEqual(BTUUIDDefs.kBLECharacteristic_ReqSave_UUID.uppercased()) {
                 print ("BTManager :: Found Characteristic <" + BTUUIDDefs.kBLECharacteristic_ReqSave_UUID + "> :: Request Save Characteristic")

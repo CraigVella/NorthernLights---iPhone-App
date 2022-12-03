@@ -13,12 +13,15 @@ class BTConnection : ObservableObject, BTManagerDelegate {
     
     @Published var isConnected:Bool     = false
     
+    private var autoReconnect = true
     private var connectionAttempting = false
     private let BTQueue = DispatchQueue(label: "BTConnectionAttempting")
     private var btManager : BTManager!
+    private var zoneObject : Zones!
     
-    init() {
+    init(ZoneObject : Zones) {
         self.btManager = BTManager(delegate: self)
+        self.zoneObject = ZoneObject
     }
     
     private func connectToNLBT() {
@@ -29,10 +32,22 @@ class BTConnection : ObservableObject, BTManagerDelegate {
     }
     
     func disconnect() {
-        
+        BTQueue.sync {
+            sleep(1)
+            btManager.disconnect()
+        }
+    }
+    
+    func setAutoReconnect(shouldReconnect :Bool) {
+        BTQueue.sync { [unowned self] in
+            autoReconnect = shouldReconnect
+        }
     }
     
     func resestablishConnection() {
+        guard autoReconnect else {
+            return
+        }
         if getConnectionAttempting() { return }
         if isConnected { return } // Check to see if you are already connected - then there is no need to reconnect
         setConnectionAttempting(isAttempting: true)  // Attempt a reconnect - or first connect
@@ -73,6 +88,27 @@ class BTConnection : ObservableObject, BTManagerDelegate {
     
     func BTReadData(data: Data) {
         print("BTReadData :: Recieved Data : Size: " + data.count.description)
+        if !zoneObject.deserialize(buffer: data) {
+            print("BTReadData :: Error Deserialzing Data")
+        }
+    }
+    
+    func BTSendDataToWR(data: Data) {
+        guard isConnected else {
+            print("BTSendDataToWR :: Trying to send Data while not connected");
+            return
+        }
+        print("BTSendDataToWR :: Sending " +  data.count.description + " Bytes")
+        btManager.sendDataUpdate(data: zoneObject.serialize())
+    }
+    
+    func BTSendSaveRequest() {
+        guard isConnected else {
+            print("BTSendSaveRequest :: Trying to send save request while not connected");
+            return
+        }
+        print("BTSendSaveRequest :: Sending Save Requst");
+        btManager.sendSaveRequest()
     }
     
 }
