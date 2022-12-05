@@ -19,9 +19,12 @@ class BTConnection : ObservableObject, BTManagerDelegate {
     private var btManager : BTManager!
     private var zoneObject : Zones!
     
-    init(ZoneObject : Zones) {
+    init(ZoneObject : Zones, Debug: Bool = false) {
         self.btManager = BTManager(delegate: self)
         self.zoneObject = ZoneObject
+        if Debug {
+            isConnected = true
+        }
     }
     
     private func connectToNLBT() {

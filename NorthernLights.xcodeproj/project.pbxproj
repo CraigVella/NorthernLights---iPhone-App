@@ -14,6 +14,7 @@
 		3C5DD04729355B230022FC61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04629355B230022FC61 /* ContentView.swift */; };
 		3C5DD04929355B230022FC61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DD04829355B230022FC61 /* Assets.xcassets */; };
 		3C5DD04C29355B230022FC61 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DD04B29355B230022FC61 /* Preview Assets.xcassets */; };
+		3C653977293D98A800A30CF2 /* ZoneMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */; };
 		3CA1575129365D0C00A92D39 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA1575029365D0C00A92D39 /* CoreBluetooth.framework */; };
 		3CA157552936646A00A92D39 /* BTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA157542936646A00A92D39 /* BTManager.swift */; };
 /* End PBXBuildFile section */
@@ -27,6 +28,7 @@
 		3C5DD04629355B230022FC61 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3C5DD04829355B230022FC61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C5DD04B29355B230022FC61 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneMoreOptions.swift; sourceTree = "<group>"; };
 		3CA1575029365D0C00A92D39 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		3CA1575229365ED100A92D39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3CA157542936646A00A92D39 /* BTManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTManager.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				3C138D162935943B005DF565 /* ZoneLighting.swift */,
 				3C5DD04829355B230022FC61 /* Assets.xcassets */,
 				3C5DD04A29355B230022FC61 /* Preview Content */,
+				3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */,
 			);
 			path = NorthernLights;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 				3CA157552936646A00A92D39 /* BTManager.swift in Sources */,
 				3C1567C42937A924000CF4CC /* BTUUIDDefs.swift in Sources */,
 				3C138D15293587EF005DF565 /* BTConnection.swift in Sources */,
+				3C653977293D98A800A30CF2 /* ZoneMoreOptions.swift in Sources */,
 				3C5DD04529355B230022FC61 /* NorthernLightsApp.swift in Sources */,
 				3C138D172935943B005DF565 /* ZoneLighting.swift in Sources */,
 			);

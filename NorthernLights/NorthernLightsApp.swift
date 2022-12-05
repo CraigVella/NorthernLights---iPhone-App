@@ -28,7 +28,6 @@ struct NorthernLightsApp: App {
                 btc.setAutoReconnect(shouldReconnect: true)
                 btc.resestablishConnection()
             } else if phase == .background {
-                btc.BTSendSaveRequest()
                 btc.setAutoReconnect(shouldReconnect: false)
                 btc.disconnect()
             }

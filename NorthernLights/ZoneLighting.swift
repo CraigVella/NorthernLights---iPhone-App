@@ -11,11 +11,39 @@ import SwiftUI
 class Zones:ObservableObject {
     @Published var zones: [ZoneLighting]
     
-    static let ZONE_VERSION   : UInt8 = 1
+    static let ZONE_VERSION   : UInt8 = 2
     static let ZONE_NAME_SIZE : UInt8 = 11
+    static let ZONE_MAX_ZONES : UInt8 = 8
     
     init() {
         self.zones = []
+    }
+    
+    init(zoneArray : [ZoneLighting]) {
+        self.zones = zoneArray
+    }
+    
+    func addNewBlankZone() -> Bool {
+        let newId = getNextAvailableZoneID()
+        guard newId.0 else {
+            return false
+        }
+        zones.append(ZoneLighting(ZoneID: newId.1, ZoneName: "New Zone"))
+        return true
+    }
+    
+    private func getNextAvailableZoneID() -> (Bool, UInt8) {
+        var idTest : UInt8 = 0
+        for zone in zones {
+            if zone.zoneID == idTest {
+                idTest += 1
+                continue
+            }
+        }
+        guard idTest != Zones.ZONE_MAX_ZONES else {
+            return (false, 0)
+        }
+        return (true, idTest)
     }
     
     func serialize() -> Data {
@@ -33,7 +61,7 @@ class Zones:ObservableObject {
         for zone in self.zones {
             returnData.append(contentsOf: [zone.zoneID])
             var zoneNameBuffer : [CChar] = Array(repeating: CChar(0), count: Int(Zones.ZONE_NAME_SIZE))
-            if !zone.zoneName.getCString(&zoneNameBuffer, maxLength: Int(Zones.ZONE_NAME_SIZE-1), encoding: String.Encoding.utf8) {
+            if !zone.zoneName.getCString(&zoneNameBuffer, maxLength: Int(Zones.ZONE_NAME_SIZE), encoding: String.Encoding.utf8) {
                 print("Zones :: WARN :: Error encoding zonename during serialization")
             }
             zoneNameBuffer.withUnsafeBytes { ptr in
@@ -45,7 +73,6 @@ class Zones:ObservableObject {
                 UInt8((zone.color.cgColor?.components![0])!*255),
                 UInt8((zone.color.cgColor?.components![1])!*255),
                 UInt8((zone.color.cgColor?.components![2])!*255),
-                zone.pin,
                 zone.ledCount
             ])
         }
@@ -90,8 +117,6 @@ class Zones:ObservableObject {
             let B = buffer[buffPtr]
             buffPtr += 1
             zl.color = Color(red: (Double(R)/255), green: (Double(G)/255), blue: (Double(B)/255))
-            zl.pin = buffer[buffPtr]
-            buffPtr += 1
             zl.ledCount = buffer[buffPtr]
             buffPtr += 1
             
@@ -104,13 +129,12 @@ class Zones:ObservableObject {
     
 }
 
-struct ZoneLighting : Identifiable {
+struct ZoneLighting : Identifiable, Equatable {
     var zoneName    : String
     var zoneID      : UInt8
     var color       : Color
     var isOn        : Bool
     var brightness  : Double
-    var pin         : UInt8
     var ledCount    : UInt8
     var id          : UInt8 { zoneID }
     
@@ -120,7 +144,6 @@ struct ZoneLighting : Identifiable {
         self.color = Color.white
         self.isOn = false
         self.brightness = 255
-        self.pin = 0
         self.ledCount = 0
     }
 }
