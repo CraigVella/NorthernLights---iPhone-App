@@ -92,7 +92,8 @@ struct ContentView: View {
                                 .frame(maxWidth: 150, minHeight: 150)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 4)
-                                        .stroke(.green, lineWidth: 1)
+                                        .stroke(.green, lineWidth: 2)
+                                        .padding(4)
                                 )
                                 .onChange(of: zone) { newValue in
                                     btc.BTSendDataToWR(data: zones.serialize())
@@ -125,6 +126,13 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+        .background() {
+            Image("Catalina36")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+                .opacity(0.5)
         }
     }
 }
