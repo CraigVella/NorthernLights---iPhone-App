@@ -26,7 +26,9 @@ struct ContentView: View {
     
     func addNewZoneAlert() -> Alert {
         Alert(title: Text("Create New Zone?"), primaryButton: .destructive(Text("Cancel")), secondaryButton: .default(Text("Create")) {
-            zones.addNewBlankZone()
+            if zones.addNewBlankZone() {
+                btc.BTSendDataToWR(data: zones.serialize())
+            }
         })
     }
     
@@ -46,6 +48,7 @@ struct ContentView: View {
                                 self.saveCompleteAlert()
                             })
                             .onTapGesture {
+                                btc.BTSendDataToWR(data: zones.serialize())
                                 btc.BTSendSaveRequest()
                                 self.saveComplete = true
                             }
@@ -66,7 +69,7 @@ struct ContentView: View {
                         .frame(height: 20)
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                            ForEach($zones.zones) {
+                            ForEach($zones.zones.values) {
                                 $zone in
                                 ZStack{
                                     if zone.isOn {
@@ -108,8 +111,6 @@ struct ContentView: View {
             .sheet(item: $selectedZone) { item in
                 ZoneMoreOptions(zoneIndex: Int(item.zoneID))
             }
-            
-            
             ZStack {
                 if !btc.isConnected {
                     Rectangle()
@@ -130,7 +131,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let z : Zones = Zones(zoneArray: [ZoneLighting(ZoneID: 0, ZoneName: "Default")])
+        let z : Zones = Zones(zoneArray: [0:ZoneLighting(ZoneID: 0, ZoneName: "Default")])
         let btc : BTConnection = BTConnection(ZoneObject: z, Debug: true)
         ContentView()
             .environmentObject(btc)

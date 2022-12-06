@@ -10,6 +10,7 @@
 		3C138D15293587EF005DF565 /* BTConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C138D14293587EF005DF565 /* BTConnection.swift */; };
 		3C138D172935943B005DF565 /* ZoneLighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C138D162935943B005DF565 /* ZoneLighting.swift */; };
 		3C1567C42937A924000CF4CC /* BTUUIDDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1567C32937A924000CF4CC /* BTUUIDDefs.swift */; };
+		3C504B36293EBF220062133E /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 3C504B35293EBF220062133E /* OrderedCollections */; };
 		3C5DD04529355B230022FC61 /* NorthernLightsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04429355B230022FC61 /* NorthernLightsApp.swift */; };
 		3C5DD04729355B230022FC61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04629355B230022FC61 /* ContentView.swift */; };
 		3C5DD04929355B230022FC61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DD04829355B230022FC61 /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C504B36293EBF220062133E /* OrderedCollections in Frameworks */,
 				3CA1575129365D0C00A92D39 /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,6 +122,9 @@
 			dependencies = (
 			);
 			name = NorthernLights;
+			packageProductDependencies = (
+				3C504B35293EBF220062133E /* OrderedCollections */,
+			);
 			productName = NorthernLights;
 			productReference = 3C5DD04129355B230022FC61 /* NorthernLights.app */;
 			productType = "com.apple.product-type.application";
@@ -149,6 +154,9 @@
 				Base,
 			);
 			mainGroup = 3C5DD03829355B230022FC61;
+			packageReferences = (
+				3C504B34293EBF220062133E /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = 3C5DD04229355B230022FC61 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -395,6 +403,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3C504B34293EBF220062133E /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3C504B35293EBF220062133E /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C504B34293EBF220062133E /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3C5DD03929355B230022FC61 /* Project object */;
 }

@@ -7,19 +7,20 @@
 
 import Foundation
 import SwiftUI
+import OrderedCollections
 
 class Zones:ObservableObject {
-    @Published var zones: [ZoneLighting]
+    @Published var zones : OrderedDictionary<Int, ZoneLighting>
     
     static let ZONE_VERSION   : UInt8 = 2
     static let ZONE_NAME_SIZE : UInt8 = 11
     static let ZONE_MAX_ZONES : UInt8 = 8
     
     init() {
-        self.zones = []
+        self.zones = [:]
     }
     
-    init(zoneArray : [ZoneLighting]) {
+    init(zoneArray : OrderedDictionary<Int, ZoneLighting>) {
         self.zones = zoneArray
     }
     
@@ -28,22 +29,25 @@ class Zones:ObservableObject {
         guard newId.0 else {
             return false
         }
-        zones.append(ZoneLighting(ZoneID: newId.1, ZoneName: "New Zone"))
+        zones[Int(newId.1)] = ZoneLighting(ZoneID: newId.1, ZoneName: "New Zone")
         return true
     }
     
     private func getNextAvailableZoneID() -> (Bool, UInt8) {
-        var idTest : UInt8 = 0
-        for zone in zones {
-            if zone.zoneID == idTest {
-                idTest += 1
-                continue
+        for i in 0...Zones.ZONE_MAX_ZONES {
+            if zones.index(forKey: Int(i)) == nil {
+                return (true,i)
             }
         }
-        guard idTest != Zones.ZONE_MAX_ZONES else {
-            return (false, 0)
-        }
-        return (true, idTest)
+        return (false, 0)
+    }
+    
+    func binding(for key: Int) -> Binding<ZoneLighting> {
+        return Binding(get: {
+            return self.zones[key] ?? ZoneLighting(ZoneID: 255, ZoneName: "Invalid")
+        }, set: {
+            self.zones[key] = $0
+        })
     }
     
     func serialize() -> Data {
@@ -59,21 +63,21 @@ class Zones:ObservableObject {
         }
         
         for zone in self.zones {
-            returnData.append(contentsOf: [zone.zoneID])
+            returnData.append(contentsOf: [zone.value.zoneID])
             var zoneNameBuffer : [CChar] = Array(repeating: CChar(0), count: Int(Zones.ZONE_NAME_SIZE))
-            if !zone.zoneName.getCString(&zoneNameBuffer, maxLength: Int(Zones.ZONE_NAME_SIZE), encoding: String.Encoding.utf8) {
+            if !zone.value.zoneName.getCString(&zoneNameBuffer, maxLength: Int(Zones.ZONE_NAME_SIZE), encoding: String.Encoding.utf8) {
                 print("Zones :: WARN :: Error encoding zonename during serialization")
             }
             zoneNameBuffer.withUnsafeBytes { ptr in
                 returnData.append(ptr.assumingMemoryBound(to: UInt8.self).baseAddress!, count: Int(Zones.ZONE_NAME_SIZE))
             }
             returnData.append(contentsOf: [
-                UInt8(zone.brightness),
-                zone.isOn ? 255 : 0,
-                UInt8((zone.color.cgColor?.components![0])!*255),
-                UInt8((zone.color.cgColor?.components![1])!*255),
-                UInt8((zone.color.cgColor?.components![2])!*255),
-                zone.ledCount
+                UInt8(zone.value.brightness),
+                zone.value.isOn ? 255 : 0,
+                UInt8((zone.value.color.cgColor?.components![0])!*255),
+                UInt8((zone.value.color.cgColor?.components![1])!*255),
+                UInt8((zone.value.color.cgColor?.components![2])!*255),
+                zone.value.ledCount
             ])
         }
         
@@ -120,7 +124,7 @@ class Zones:ObservableObject {
             zl.ledCount = buffer[buffPtr]
             buffPtr += 1
             
-            self.zones.append(zl)
+            self.zones[Int(zl.zoneID)] = zl
         }
         
         print("Zones :: Deserialization Complete");
