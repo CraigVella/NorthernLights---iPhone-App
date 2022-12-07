@@ -9,8 +9,9 @@ import Foundation
 import SwiftUI
 import OrderedCollections
 
-class Zones:ObservableObject {
+class Zones : ObservableObject {
     @Published var zones : OrderedDictionary<Int, ZoneLighting>
+    @Published var zoneGroups : OrderedDictionary<Int, ZoneGroup>
     
     static let ZONE_VERSION   : UInt8 = 2
     static let ZONE_NAME_SIZE : UInt8 = 11
@@ -18,10 +19,13 @@ class Zones:ObservableObject {
     
     init() {
         self.zones = [:]
+        self.zoneGroups = [:]
     }
     
-    init(zoneArray : OrderedDictionary<Int, ZoneLighting>) {
+    convenience init(zoneArray : OrderedDictionary<Int, ZoneLighting>, zoneGroups : OrderedDictionary<Int, ZoneGroup> = [:]) {
+        self.init()
         self.zones = zoneArray
+        self.zoneGroups = zoneGroups
     }
     
     func addNewBlankZone() -> Bool {
@@ -42,11 +46,28 @@ class Zones:ObservableObject {
         return (false, 0)
     }
     
+    func getNextAvailableZoneGroupID() -> Int {
+        for i in 0...Int.max {
+            if (zoneGroups.index(forKey: Int(i)) == nil) {
+                return i
+            }
+        }
+        return -1
+    }
+    
     func binding(for key: Int) -> Binding<ZoneLighting> {
         return Binding(get: {
             return self.zones[key] ?? ZoneLighting(ZoneID: 255, ZoneName: "Invalid")
         }, set: {
             self.zones[key] = $0
+        })
+    }
+    
+    func zoneGroupBinding(for key: Int) -> Binding<ZoneGroup> {
+        return Binding(get: {
+            return self.zoneGroups[key] ?? ZoneGroup(ZoneGroupName: "Invalid", ZoneSettings: ZoneLighting(ZoneID: 255, ZoneName: "Invalid"), ZoneIDs: [], z: self)
+        }, set: {
+            self.zoneGroups[key] = $0
         })
     }
     
@@ -90,7 +111,10 @@ class Zones:ObservableObject {
             print("Zones :: Deserialization Failed Due to Zone Version Mismatch got " + String(buffer[buffPtr]) + " expected " + String(Zones.ZONE_VERSION))
             return false
         }
+        
+        self.zoneGroups.removeAll()
         self.zones.removeAll()
+        
         buffPtr += 1
         let zoneCount = buffer[buffPtr]
         buffPtr += 1
@@ -131,6 +155,45 @@ class Zones:ObservableObject {
         return true
     }
     
+}
+
+struct ZoneGroup : Identifiable {
+    var ZoneGroupName        : String
+    var ZoneSettings         : ZoneLighting
+    var ZoneIDs              : [UInt8]
+    var ZoneGroupID          : Int
+    var useZoneGroupLighting : Bool = false
+    var id                   : Int {ZoneGroupID}
+    private var zones : Zones
+    
+    enum onState {
+        case on, off, middle
+    }
+    
+    var isOn : onState {
+        var hasOn  : Bool = false
+        var hasOff : Bool = false
+        for zid in ZoneIDs {
+            if zones.zones[Int(zid)]?.isOn ?? false {
+                hasOn = true
+            } else if !(zones.zones[Int(zid)]?.isOn ?? true){
+                hasOff = true
+            }
+        }
+        var os : onState = .off
+        if hasOn && hasOff { os = .middle }
+        if !hasOn && hasOff { os = .off }
+        if hasOn && !hasOff { os = .on }
+        return os
+    }
+    
+    init(ZoneGroupName: String, ZoneSettings: ZoneLighting, ZoneIDs: [UInt8], z : Zones) {
+        self.ZoneGroupName = ZoneGroupName
+        self.ZoneSettings = ZoneSettings
+        self.ZoneIDs = ZoneIDs
+        self.zones = z
+        self.ZoneGroupID = z.getNextAvailableZoneGroupID()
+    }
 }
 
 struct ZoneLighting : Identifiable, Equatable {

@@ -10,9 +10,13 @@
 		3C138D15293587EF005DF565 /* BTConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C138D14293587EF005DF565 /* BTConnection.swift */; };
 		3C138D172935943B005DF565 /* ZoneLighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C138D162935943B005DF565 /* ZoneLighting.swift */; };
 		3C1567C42937A924000CF4CC /* BTUUIDDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1567C32937A924000CF4CC /* BTUUIDDefs.swift */; };
+		3C1EB2B7293F8F760029DC38 /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EB2B6293F8F760029DC38 /* ParentView.swift */; };
+		3C1EB2B9293F9A6C0029DC38 /* ZoneGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EB2B8293F9A6C0029DC38 /* ZoneGroupView.swift */; };
+		3C1EB2BB293FB6F10029DC38 /* ZoneGroupCreate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EB2BA293FB6F10029DC38 /* ZoneGroupCreate.swift */; };
+		3C274A8C2941122300F5B074 /* ZoneGroupMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C274A8B2941122300F5B074 /* ZoneGroupMoreOptions.swift */; };
 		3C504B36293EBF220062133E /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 3C504B35293EBF220062133E /* OrderedCollections */; };
 		3C5DD04529355B230022FC61 /* NorthernLightsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04429355B230022FC61 /* NorthernLightsApp.swift */; };
-		3C5DD04729355B230022FC61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04629355B230022FC61 /* ContentView.swift */; };
+		3C5DD04729355B230022FC61 /* ZoneControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5DD04629355B230022FC61 /* ZoneControlView.swift */; };
 		3C5DD04929355B230022FC61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DD04829355B230022FC61 /* Assets.xcassets */; };
 		3C5DD04C29355B230022FC61 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5DD04B29355B230022FC61 /* Preview Assets.xcassets */; };
 		3C653977293D98A800A30CF2 /* ZoneMoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */; };
@@ -24,9 +28,13 @@
 		3C138D14293587EF005DF565 /* BTConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTConnection.swift; sourceTree = "<group>"; };
 		3C138D162935943B005DF565 /* ZoneLighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneLighting.swift; sourceTree = "<group>"; };
 		3C1567C32937A924000CF4CC /* BTUUIDDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTUUIDDefs.swift; sourceTree = "<group>"; };
+		3C1EB2B6293F8F760029DC38 /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
+		3C1EB2B8293F9A6C0029DC38 /* ZoneGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneGroupView.swift; sourceTree = "<group>"; };
+		3C1EB2BA293FB6F10029DC38 /* ZoneGroupCreate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneGroupCreate.swift; sourceTree = "<group>"; };
+		3C274A8B2941122300F5B074 /* ZoneGroupMoreOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneGroupMoreOptions.swift; sourceTree = "<group>"; };
 		3C5DD04129355B230022FC61 /* NorthernLights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NorthernLights.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C5DD04429355B230022FC61 /* NorthernLightsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorthernLightsApp.swift; sourceTree = "<group>"; };
-		3C5DD04629355B230022FC61 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3C5DD04629355B230022FC61 /* ZoneControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneControlView.swift; sourceTree = "<group>"; };
 		3C5DD04829355B230022FC61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C5DD04B29355B230022FC61 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneMoreOptions.swift; sourceTree = "<group>"; };
@@ -71,11 +79,15 @@
 				3CA157532936645700A92D39 /* Bluetooth */,
 				3CA1575229365ED100A92D39 /* Info.plist */,
 				3C5DD04429355B230022FC61 /* NorthernLightsApp.swift */,
-				3C5DD04629355B230022FC61 /* ContentView.swift */,
+				3C5DD04629355B230022FC61 /* ZoneControlView.swift */,
+				3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */,
+				3C274A8B2941122300F5B074 /* ZoneGroupMoreOptions.swift */,
+				3C1EB2B6293F8F760029DC38 /* ParentView.swift */,
+				3C1EB2B8293F9A6C0029DC38 /* ZoneGroupView.swift */,
+				3C1EB2BA293FB6F10029DC38 /* ZoneGroupCreate.swift */,
 				3C138D162935943B005DF565 /* ZoneLighting.swift */,
 				3C5DD04829355B230022FC61 /* Assets.xcassets */,
 				3C5DD04A29355B230022FC61 /* Preview Content */,
-				3C653976293D98A800A30CF2 /* ZoneMoreOptions.swift */,
 			);
 			path = NorthernLights;
 			sourceTree = "<group>";
@@ -183,13 +195,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C5DD04729355B230022FC61 /* ContentView.swift in Sources */,
+				3C1EB2B7293F8F760029DC38 /* ParentView.swift in Sources */,
+				3C5DD04729355B230022FC61 /* ZoneControlView.swift in Sources */,
 				3CA157552936646A00A92D39 /* BTManager.swift in Sources */,
+				3C274A8C2941122300F5B074 /* ZoneGroupMoreOptions.swift in Sources */,
 				3C1567C42937A924000CF4CC /* BTUUIDDefs.swift in Sources */,
 				3C138D15293587EF005DF565 /* BTConnection.swift in Sources */,
 				3C653977293D98A800A30CF2 /* ZoneMoreOptions.swift in Sources */,
 				3C5DD04529355B230022FC61 /* NorthernLightsApp.swift in Sources */,
+				3C1EB2BB293FB6F10029DC38 /* ZoneGroupCreate.swift in Sources */,
 				3C138D172935943B005DF565 /* ZoneLighting.swift in Sources */,
+				3C1EB2B9293F9A6C0029DC38 /* ZoneGroupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +262,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -300,7 +316,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -325,12 +341,13 @@
 				INFOPLIST_FILE = NorthernLights/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Northern Lights Controller";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow me to use Northern Lights bluetooth connection?";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow me to use Northern Lights bluetooth connection?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -361,12 +378,13 @@
 				INFOPLIST_FILE = NorthernLights/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Northern Lights Controller";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Allow me to use Northern Lights bluetooth connection?";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Allow me to use Northern Lights bluetooth connection?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -35,7 +35,6 @@ struct ZoneMoreOptions : View {
                             Text("Cancel").foregroundColor(.red)
                         }
                         Button("Delete") {
-                            //zones.removeZone(zone: zones.zones[zoneIndex])
                             zones.zones.removeValue(forKey: zoneIndex)
                             btc.BTSendDataToWR(data: zones.serialize())
                             dismiss()
@@ -52,9 +51,7 @@ struct ZoneMoreOptions : View {
                     TextField("Name", text: $previousName).onChange(of: previousName) { _ in
                         previousName = String(previousName.prefix(Int(Zones.ZONE_NAME_SIZE)-1))
                     }
-                    Button(action:{}) {
-                        Text("Cancel").foregroundColor(.red)
-                    }
+                    Button("Cancel") {}
                     Button("Save") {
                         zones.zones[zoneIndex]?.zoneName = previousName
                     }
@@ -90,7 +87,7 @@ struct ZoneMoreOptions : View {
 
 struct ZoneMoreOptions_Preview : PreviewProvider {
     static var previews: some View {
-        let z = Zones(zoneArray: [0:ZoneLighting(ZoneID: 0, ZoneName: "TestZone")])
+        let z = Zones(zoneArray: [0:ZoneLighting(ZoneID: 0, ZoneName: "Test Zone")])
         let btc = BTConnection(ZoneObject: z, Debug: true)
         ZoneMoreOptions(zoneIndex: 0)
             .environmentObject(z)

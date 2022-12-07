@@ -20,7 +20,7 @@ struct NorthernLightsApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ParentView()
                 .environmentObject(btc)
                 .environmentObject(zones)
         }.onChange(of: scenePhase) { phase in
