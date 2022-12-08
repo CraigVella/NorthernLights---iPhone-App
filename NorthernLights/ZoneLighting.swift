@@ -13,9 +13,12 @@ class Zones : ObservableObject {
     @Published var zones : OrderedDictionary<Int, ZoneLighting>
     @Published var zoneGroups : OrderedDictionary<Int, ZoneGroup>
     
-    static let ZONE_VERSION   : UInt8 = 2
-    static let ZONE_NAME_SIZE : UInt8 = 11
-    static let ZONE_MAX_ZONES : UInt8 = 8
+    private var userDefaults = UserDefaults.standard
+    
+    static let ZONE_VERSION   : UInt8  = 2
+    static let ZONE_NAME_SIZE : UInt8  = 11
+    static let ZONE_MAX_ZONES : UInt8  = 8
+    static let ZONE_GROUP_SAVE: String = "ZONEGROUPS"
     
     init() {
         self.zones = [:]
@@ -71,6 +74,41 @@ class Zones : ObservableObject {
         })
     }
     
+    func saveZoneGroups() {
+        do {
+            let encoder = JSONEncoder();
+            let data = try encoder.encode(zoneGroups)
+            userDefaults.set(data, forKey: Zones.ZONE_GROUP_SAVE)
+            print ("SaveZoneGroups :: Saved Zone Group Data")
+        } catch {
+            print (error)
+        }
+    }
+    
+    func restoreZoneGroups() {
+        do {
+            let decoder = JSONDecoder();
+            let values = try decoder.decode(OrderedDictionary<Int, ZoneGroup>.self, from: userDefaults.data(forKey: Zones.ZONE_GROUP_SAVE) ?? Data())
+            for zg in values.values {
+                var zoneGroupValid = true
+                for zid in zg.ZoneIDs {
+                    if self.zones.index(forKey: Int(zid)) == nil {
+                        zoneGroupValid = false
+                    }
+                }
+                guard zoneGroupValid else {
+                    continue
+                }
+                // We consider this a valid zone group - as all the zones it's grouping actually exist - restore them
+                zg.setNewZonesObj(z: self)
+                zg.ZoneGroupID = getNextAvailableZoneGroupID()
+                zoneGroups[zg.ZoneGroupID] = zg
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     func serialize() -> Data {
         var returnData : Data = Data.init()
         returnData.append(contentsOf: [
@@ -101,6 +139,8 @@ class Zones : ObservableObject {
                 zone.value.ledCount
             ])
         }
+        
+        saveZoneGroups()
         
         return returnData
     }
@@ -151,18 +191,20 @@ class Zones : ObservableObject {
             self.zones[Int(zl.zoneID)] = zl
         }
         
+        restoreZoneGroups()
+        
         print("Zones :: Deserialization Complete");
         return true
     }
     
 }
 
-struct ZoneGroup : Identifiable {
-    var ZoneGroupName        : String
-    var ZoneSettings         : ZoneLighting
-    var ZoneIDs              : [UInt8]
-    var ZoneGroupID          : Int
-    var useZoneGroupLighting : Bool = false
+class ZoneGroup : Identifiable, Codable, ObservableObject {
+    @Published var ZoneGroupName        : String
+    @Published var ZoneSettings         : ZoneLighting
+    @Published var ZoneIDs              : [UInt8]
+    @Published var ZoneGroupID          : Int
+    @Published var useZoneGroupLighting : Bool = false
     var id                   : Int {ZoneGroupID}
     private var zones : Zones
     
@@ -194,9 +236,40 @@ struct ZoneGroup : Identifiable {
         self.zones = z
         self.ZoneGroupID = z.getNextAvailableZoneGroupID()
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case ZoneGroupName
+        case ZoneSettings
+        case ZoneIDs
+        case ZoneGroupID
+        case useZoneGroupLighting
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.ZoneGroupName, forKey: .ZoneGroupName)
+        try container.encode(self.ZoneSettings, forKey: .ZoneSettings)
+        try container.encode(self.ZoneIDs, forKey: .ZoneIDs)
+        try container.encode(self.useZoneGroupLighting, forKey: .useZoneGroupLighting)
+    }
+    
+    func setNewZonesObj(z : Zones) {
+        self.zones = z
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        ZoneGroupName = try values.decode(String.self, forKey: .ZoneGroupName)
+        ZoneSettings = try values.decode(ZoneLighting.self, forKey: .ZoneSettings)
+        ZoneIDs = try values.decode([UInt8].self, forKey: .ZoneIDs)
+        useZoneGroupLighting = try values.decode(Bool.self, forKey: .useZoneGroupLighting)
+        ZoneGroupID = 255
+        zones = Zones()
+    }
 }
 
-struct ZoneLighting : Identifiable, Equatable {
+struct ZoneLighting : Identifiable, Equatable, Codable {
+    
     var zoneName    : String
     var zoneID      : UInt8
     var color       : Color
@@ -212,5 +285,40 @@ struct ZoneLighting : Identifiable, Equatable {
         self.isOn = false
         self.brightness = 255
         self.ledCount = 0
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        zoneName = try values.decode(String.self, forKey: .zoneName)
+        zoneID = try values.decode(UInt8.self, forKey: .zoneID)
+        color = try Color(red:values.decode(Double.self, forKey: .colorR),
+                          green: values.decode(Double.self, forKey: .colorG),
+                          blue: values.decode(Double.self, forKey: .colorB))
+        isOn = try values.decode(Bool.self, forKey: CodingKeys.isOn)
+        brightness = try values.decode(Double.self, forKey: CodingKeys.brightness)
+        ledCount = try values.decode(UInt8.self, forKey: CodingKeys.ledCount)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var e = encoder.container(keyedBy: CodingKeys.self)
+        try e.encode(zoneName, forKey: .zoneName)
+        try e.encode(zoneID, forKey: .zoneID)
+        try e.encode(color.cgColor?.components?[0] ?? 0, forKey: .colorR)
+        try e.encode(color.cgColor?.components?[1] ?? 0, forKey: .colorG)
+        try e.encode(color.cgColor?.components?[2] ?? 0, forKey: .colorB)
+        try e.encode(isOn, forKey: .isOn)
+        try e.encode(brightness, forKey: .brightness)
+        try e.encode(ledCount, forKey: .ledCount)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case zoneName
+        case zoneID
+        case colorR
+        case colorG
+        case colorB
+        case isOn
+        case brightness
+        case ledCount
     }
 }

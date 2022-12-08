@@ -96,13 +96,14 @@ class BTConnection : ObservableObject, BTManagerDelegate {
         }
     }
     
-    func BTSendDataToWR(data: Data) {
+    func BTSendDataToWR() {
         guard isConnected else {
             print("BTSendDataToWR :: Trying to send Data while not connected");
             return
         }
+        let data = zoneObject.serialize()
         print("BTSendDataToWR :: Sending " +  data.count.description + " Bytes")
-        btManager.sendDataUpdate(data: zoneObject.serialize())
+        btManager.sendDataUpdate(data: data)
     }
     
     func BTSendSaveRequest() {

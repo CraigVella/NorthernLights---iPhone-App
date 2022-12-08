@@ -36,7 +36,7 @@ struct ZoneMoreOptions : View {
                         }
                         Button("Delete") {
                             zones.zones.removeValue(forKey: zoneIndex)
-                            btc.BTSendDataToWR(data: zones.serialize())
+                            btc.BTSendDataToWR()
                             dismiss()
                         }
                     }

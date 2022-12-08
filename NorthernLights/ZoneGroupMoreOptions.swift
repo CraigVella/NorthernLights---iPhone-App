@@ -35,6 +35,7 @@ struct ZoneGroupMoreOptions : View {
                         }
                         Button("Delete") {
                             zones.zoneGroups.removeValue(forKey: zoneGroupID)
+                            zones.saveZoneGroups()
                             dismiss()
                         }
                     }
@@ -50,6 +51,7 @@ struct ZoneGroupMoreOptions : View {
                     Button("Cancel") {}
                     Button("Save") {
                         zones.zoneGroups[zoneGroupID]?.ZoneGroupName = previousName
+                        zones.saveZoneGroups()
                     }
                 }
             }

@@ -27,7 +27,7 @@ struct ZoneControlView: View {
     func addNewZoneAlert() -> Alert {
         Alert(title: Text("Create New Zone?"), primaryButton: .destructive(Text("Cancel")), secondaryButton: .default(Text("Create")) {
             if zones.addNewBlankZone() {
-                btc.BTSendDataToWR(data: zones.serialize())
+                btc.BTSendDataToWR()
             }
         })
     }
@@ -44,7 +44,7 @@ struct ZoneControlView: View {
                         self.saveCompleteAlert()
                     })
                     .onTapGesture {
-                        btc.BTSendDataToWR(data: zones.serialize())
+                        btc.BTSendDataToWR()
                         btc.BTSendSaveRequest()
                         self.saveComplete = true
                     }
@@ -92,7 +92,7 @@ struct ZoneControlView: View {
                                 .padding(4)
                         )
                         .onChange(of: zone) { newValue in
-                            btc.BTSendDataToWR(data: zones.serialize())
+                            btc.BTSendDataToWR()
                         }
                         .onTapGesture {
                             zone.isOn.toggle()

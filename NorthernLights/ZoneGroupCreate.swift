@@ -84,6 +84,7 @@ struct ZoneGroupCreate : View {
                 }
                 let newZG = ZoneGroup(ZoneGroupName: zoneGroupName, ZoneSettings: ZoneLighting(ZoneID: 255, ZoneName: "ZG-Holder"), ZoneIDs: zids, z: zones)
                 zones.zoneGroups[newZG.ZoneGroupID] = newZG
+                zones.saveZoneGroups()
                 dismiss()
             }
             .disabled(!isSelected)
