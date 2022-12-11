@@ -16,7 +16,6 @@ struct ZoneMoreOptions : View {
     @State var showNameChange = false
     @State var showZoneDelete = false
     @State var previousName = ""
-    @State var newSliderValue : Double = 0
     
     var zoneIndex : Int
     
@@ -60,14 +59,10 @@ struct ZoneMoreOptions : View {
             Text("Zone \((zones.zones[zoneIndex]?.zoneID ?? 0) + 1) - Additional Options")
             ColorPicker("Light Color", selection: zones.binding(for: zoneIndex).color, supportsOpacity: false)
             HStack{
-                Text("Brightness - " + Int(((newSliderValue/255) * 100).rounded()).description + "%")
-                Slider(value: $newSliderValue, in: 0...255, step: 1, label: {
+                Text("Brightness - " + Int((((zones.zones[zoneIndex]?.brightness ?? 0)/255) * 100).rounded()).description + "%")
+                Slider(value: zones.binding(for: zoneIndex).brightness, in: 0...255, step: 1, label: {
                     Label("Brightness", systemImage: "lightbulb")
-                }) {edit in
-                    if !edit {
-                        zones.zones[zoneIndex]?.brightness = newSliderValue
-                    }
-                }
+                })
             }
             Stepper(value: zones.binding(for: zoneIndex).ledCount, in: 0...255) {
                 Text("LED Count - " + Int(zones.zones[zoneIndex]?.ledCount ?? 0).description)
@@ -79,9 +74,6 @@ struct ZoneMoreOptions : View {
             Spacer()
         }
         .padding(20)
-        .onAppear(){
-            newSliderValue = zones.zones[zoneIndex]?.brightness ?? 0
-        }
     }
 }
 

@@ -15,7 +15,6 @@ struct ZoneGroupMoreOptions : View {
     @State var showNameChange = false
     @State var showZoneDelete = false
     @State var previousName = ""
-    @State var newSliderValue : Double = 0
     
     var zoneGroupID : Int
     
@@ -70,14 +69,10 @@ struct ZoneGroupMoreOptions : View {
             GroupBox("Grouped Zone Options") {
                 ColorPicker("Light Color", selection: zones.zoneGroupBinding(for: zoneGroupID).ZoneSettings.color, supportsOpacity: false)
                 HStack{
-                    Text("Brightness - " + Int(((newSliderValue/255) * 100).rounded()).description + "%")
-                    Slider(value: $newSliderValue, in: 0...255, step: 1, label: {
+                    Text("Brightness - " + Int((((zones.zoneGroups[zoneGroupID]?.ZoneSettings.brightness ?? 0)/255) * 100).rounded()).description + "%")
+                    Slider(value: zones.zoneGroupBinding(for: zoneGroupID).ZoneSettings.brightness, in: 0...255, step: 1, label: {
                         Label("Brightness", systemImage: "lightbulb")
-                    }) {edit in
-                        if !edit {
-                            zones.zoneGroups[zoneGroupID]?.ZoneSettings.brightness = newSliderValue
-                        }
-                    }
+                    })
                 }
             }
             .onChange(of: zones.zoneGroups[zoneGroupID]?.ZoneSettings, perform: { _ in
@@ -94,9 +89,6 @@ struct ZoneGroupMoreOptions : View {
             Spacer()
         }
         .padding(20)
-        .onAppear(){
-            newSliderValue = zones.zoneGroups[zoneGroupID]?.ZoneSettings.brightness ?? 0
-        }
     }
 }
 
